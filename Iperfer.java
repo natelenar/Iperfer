@@ -49,8 +49,8 @@ public class Iperfer {
 		portNum = Integer.parseInt(port);
 
 	}
-
-	public static void main(String[] args) throws Exception{
+	public static String[] argsParser(String[] args){
+		String[] argVars = new String[7];
 		if(args[0].equals("-c")) {
 			if(args.length != 7) {
 				System.out.println("Error: invalid arguments");
@@ -61,36 +61,31 @@ public class Iperfer {
 			if((Integer.parseInt(args[4]) < 1024) || (Integer.parseInt(args[4]) > 65535)) {
 				System.out.println("Error: port number must be in the range 1024 to 65535");
 			}
-			String hostName = args[2];
-			int portNumber = Integer.parseInt(args[4]);
-			int time = Integer.parseInt(args[6]);
-			try (
-		            Socket iperf = new Socket(hostName, portNumber);
-		            PrintWriter out =
-		                new PrintWriter(iperf.getOutputStream(), true);
-		            BufferedReader in =
-		                new BufferedReader(
-		                    new InputStreamReader(iperf.getInputStream()));
-		            BufferedReader stdIn =
-		                new BufferedReader(
-		                    new InputStreamReader(System.in))
-		        ) {
-				String userInput;
-	            while ((userInput = stdIn.readLine()) != null) {
-	                out.println(userInput);
-	                System.out.println("echo: " + in.readLine());
-	            }
-		        } catch (UnknownHostException e) {
-		            System.exit(1);
-		        } catch (IOException e) {
-		            System.exit(1);
-		        }
-		    }
-		//client(args[0], args[1]);
-		server(args[1]);
-		//client(args[0], args[1]);
-
-
+			argVars[0] = args[2];
+			argVars[1] = args[4];
+			argVars[3] = args[6];
+		}
+		if(args[0].equals("-s")){
+			if (args.length != 3) {
+				System.err.println("Error: invalid arguments");
+				System.exit(1);
+			}
+			if((Integer.parseInt(args[2]) < 1024) || (Integer.parseInt(args[2]) > 65535)) {
+				System.out.println("Error: port number must be in the range 1024 to 65535");
+			}
+			argVars[0] = args[2];
+		}
+		return argVars;
 	}
+
+	public static void main(String[] args) throws Exception{
+		String[] argVars = argsParser(args);
+
+	//client(args[0], args[1]);
+	server(args[1]);
+	//client(args[0], args[1]);
+
+
+}
 
 }
