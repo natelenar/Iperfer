@@ -8,7 +8,11 @@ public class Iperfer {
 	public static String hostName;
 	public static int portNum;
 
-	public static void client(String host, String port, int time) throws Exception {
+	public static void client(String[] arg) throws Exception {
+		String host = arg[0];
+		String port = arg[1];
+		int time = Integer.parseInt(arg[2]);
+
 		int sentPkt = 0;
 		long t = time * 1000;
 		long ms = System.currentTimeMillis();
@@ -17,18 +21,21 @@ public class Iperfer {
 		for(int i = 0; i < 1000; i++){
 			byteString[i] = 0;
 		}
+		try{
+			portNum = Integer.parseInt(port);
+			Socket client = new Socket("localhost", 8989);
 
-		portNum = Integer.parseInt(port);
-		Socket client = new Socket("localhost", 8989);
+			String str = "hello there";
 
-		String str = "hello there";
+			OutputStreamWriter os = new OutputStreamWriter(client.getOutputStream());
+			PrintWriter out = new PrintWriter(os);
 
-		OutputStreamWriter os = new OutputStreamWriter(client.getOutputStream());
-		PrintWriter out = new PrintWriter(os);
-
-		while(System.currentTimeMillis() < ms){
-			os.write(byteString);
-			sentPkt ++;
+			while(System.currentTimeMillis() < ms){
+				os.write(byteString);
+				sentPkt ++;
+			}
+		) catch (Exception e){
+			System.out.println("ERRORRRRRR!")
 		}
 		int mbps = ((sentPkt / 1000) * 8) / t;
 
