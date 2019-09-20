@@ -31,7 +31,7 @@ public class Iperfer {
 			PrintWriter out = new PrintWriter(os);
 
 			while(System.currentTimeMillis() < ms){
-				os.write(byteString);
+				out.write(byteString);
 				sentPkt ++;
 			}
 		) catch (Exception e){
@@ -42,14 +42,24 @@ public class Iperfer {
 		System.out.println("sent = " + sentPkt + "rate = " + mbps);
 	}
 
-	public static void server(String port) throws IOException {
-		portNum = Integer.parseInt(port);
+	public static void server(String[] args) throws IOException {
+		portNum = Integer.parseInt(args[0]);
 		ServerSocket server = new ServerSocket(8989);
 		Socket client = server.accept();
+		byte byteString[] = new  byte[1000];
+		int received;
+		int mbps;
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
-		String sr = br.readLine();
-		System.out.println(sr);
+		try{
+			BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			while(br.read(byteString, 0, 1000) != -1){
+				received++;
+			}
+		} catch(Exception e){
+			System.out.println("ERROR in Server");
+		}
+		mbps = ((received / 100) * 8) / t;
+		System.out.println("received = " + received + "rate = " + mbps);
 	}
 	public static void args(String host, String port) {
 		hostName = host;
