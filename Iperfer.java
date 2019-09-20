@@ -17,9 +17,9 @@ public class Iperfer {
 		long t = time * 1000;
 		long ms = System.currentTimeMillis();
 		t = ms + t;
-		byte byteString[];
-		for(int i = 0; i < 1000; i++){
-			byteString[i] = 0;
+		int[] packet = new int[250];
+		for(int i = 0; i < 250; i++){
+			packet[i] = 0;
 		}
 		try{
 			portNum = Integer.parseInt(port);
@@ -31,14 +31,14 @@ public class Iperfer {
 			PrintWriter out = new PrintWriter(os);
 
 			while(System.currentTimeMillis() < ms){
-				out.print(byteString);
+				out.print(packet);
 				sentPkt ++;
 			}
 		}
 		catch (Exception e){
 			System.out.println("ERRORRRRRR!");
 		}
-		int mbps = ((sentPkt / 1000) * 8) / t;
+		long mbps = ((sentPkt / 1000) * 8) / t;
 
 		System.out.println("sent = " + sentPkt + "rate = " + mbps);
 	}
@@ -47,19 +47,19 @@ public class Iperfer {
 		portNum = Integer.parseInt(args[0]);
 		ServerSocket server = new ServerSocket(8989);
 		Socket client = server.accept();
-		byte byteString[] = new  byte[1000];
-		int received;
-		int mbps;
+		String packet = null;
+		int received = 0;
+		int mbps  = 0;
 
 		try{
 			BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
-			while(br.read(byteString, 0, 1000) != -1){
+			while((packet = br.readLine()) != null){
 				received++;
 			}
 		} catch(Exception e){
 			System.out.println("ERROR in Server");
 		}
-		mbps = ((received / 100) * 8) / t;
+		//	mbps = ((received / 100) * 8) / t;
 		System.out.println("received = " + received + "rate = " + mbps);
 	}
 	public static void args(String host, String port) {
@@ -98,12 +98,6 @@ public class Iperfer {
 
 	public static void main(String[] args) throws Exception{
 		String[] argVars = argsParser(args);
-
-		//client(args[0], args[1]);
-		server(args[1]);
-		//client(args[0], args[1]);
-
-
 	}
 
 }
