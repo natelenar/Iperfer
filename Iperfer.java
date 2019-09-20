@@ -81,7 +81,7 @@ public class Iperfer {
 			}
 			argVars[0] = args[2];
 			argVars[1] = args[4];
-			argVars[3] = args[6];
+			argVars[2] = args[6];
 		}
 		if(args[0].equals("-s")){
 			if (args.length != 3) {
@@ -98,6 +98,14 @@ public class Iperfer {
 
 	public static void main(String[] args) throws Exception{
 		String[] argVars = argsParser(args);
+		if(args[0].equals("-c")){
+			System.out.println("got to client");
+			client(argVars);
+		}
+		if(args[0].equals("-s")){
+			System.out.println("got to server");
+			server(argVars);
+		}
 	}
 
 }
