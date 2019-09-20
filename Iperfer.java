@@ -31,11 +31,12 @@ public class Iperfer {
 			PrintWriter out = new PrintWriter(os);
 
 			while(System.currentTimeMillis() < ms){
-				os.write(byteString);
+				out.print(byteString);
 				sentPkt ++;
 			}
-		) catch (Exception e){
-			System.out.println("ERRORRRRRR!")
+		}
+		catch (Exception e){
+			System.out.println("ERRORRRRRR!");
 		}
 		int mbps = ((sentPkt / 1000) * 8) / t;
 
@@ -88,11 +89,11 @@ public class Iperfer {
 	public static void main(String[] args) throws Exception{
 		String[] argVars = argsParser(args);
 
-	//client(args[0], args[1]);
-	server(args[1]);
-	//client(args[0], args[1]);
+		//client(args[0], args[1]);
+		server(args[1]);
+		//client(args[0], args[1]);
 
 
-}
+	}
 
 }
