@@ -7,24 +7,39 @@ import java.io.*;
 public class Iperfer {
 	public static String hostName;
 	public static int portNum;
-	
-	public static void client(String host, String port) throws Exception {
+
+	public static void client(String host, String port, int time) throws Exception {
+		int sentPkt = 0;
+		long t = time * 1000;
+		long ms = System.currentTimeMillis();
+		t = ms + t;
+		byte byteString[];
+		for(int i = 0; i < 1000; i++){
+			byteString[i] = 0;
+		}
+
 		portNum = Integer.parseInt(port);
 		Socket client = new Socket("localhost", 8989);
-		
+
 		String str = "hello there";
-		
+
 		OutputStreamWriter os = new OutputStreamWriter(client.getOutputStream());
 		PrintWriter out = new PrintWriter(os);
-		
-		os.write(str);
-		
+
+		while(System.currentTimeMillis() < ms){
+			os.write(byteString);
+			sentPkt ++;
+		}
+		int mbps = ((sentPkt / 1000) * 8) / t;
+
+		System.out.println("sent = " + sentPkt + "rate = " + mbps);
 	}
+
 	public static void server(String port) throws IOException {
 		portNum = Integer.parseInt(port);
 		ServerSocket server = new ServerSocket(8989);
 		Socket client = server.accept();
-		
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
 		String sr = br.readLine();
 		System.out.println(sr);
@@ -32,9 +47,9 @@ public class Iperfer {
 	public static void args(String host, String port) {
 		hostName = host;
 		portNum = Integer.parseInt(port);
-		
+
 	}
-	
+
 	public static void main(String[] args) throws Exception{
 		if(args[0].equals("-c")) {
 			if(args.length != 7) {
@@ -69,13 +84,13 @@ public class Iperfer {
 		            System.exit(1);
 		        } catch (IOException e) {
 		            System.exit(1);
-		        } 
+		        }
 		    }
 		//client(args[0], args[1]);
 		server(args[1]);
 		//client(args[0], args[1]);
-		
- 
+
+
 	}
 
 }
